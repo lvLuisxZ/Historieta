@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería Interactiva</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 2.5rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Galería */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .vignette {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .vignette.hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            height: 0;
+            margin-bottom: -25px;
+        }
+
+        .vignette-img-container {
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .vignette-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .vignette:hover .vignette-img {
+            transform: scale(1.05);
+        }
+
+        .vignette-text {
+            padding: 20px;
+            background-color: white;
+        }
+
+        .vignette-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .vignette-desc {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Presentación automática */
+        .presentation-mode .vignette {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .presentation-mode .vignette.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .vignette {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .vignette:nth-child(1) { animation-delay: 0.1s; }
+        .vignette:nth-child(2) { animation-delay: 0.2s; }
+        .vignette:nth-child(3) { animation-delay: 0.3s; }
+        .vignette:nth-child(4) { animation-delay: 0.4s; }
+        .vignette:nth-child(5) { animation-delay: 0.5s; }
+        .vignette:nth-child(6) { animation-delay: 0.6s; }
+        .vignette:nth-child(7) { animation-delay: 0.7s; }
+        .vignette:nth-child(8) { animation-delay: 0.8s; }
+        .vignette:nth-child(9) { animation-delay: 0.9s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mi Galería Interactiva</h1>
+        
+        <div class="controls">
+            <button id="showAllBtn" class="btn">Mostrar Todas</button>
+            <button id="presentationBtn" class="btn">Modo Presentación</button>
+        </div>
+        
+        <div class="gallery">
+            <!-- Viñeta 1 -->
+            <div class="vignette" data-id="1">
+                <div class="vignette-img-container">
+                    <img src="image.png" alt="Imagen 1" class="vignette-img">
+                </div>
+                <div class="vignette-text">
+                    <div class="vignette-desc">
+                        <!-- Aquí puedes poner tu texto/diálogo -->
+                        Descripción para la imagen 1
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Viñeta 2 -->
+            <div class="vignette" data-id="2">
+                <div class="vignette-img-container">
+                    <img src="Imagen2.png" alt="Imagen 2" class="vignette-img">
+                </div>
+                <div class="vignette-text">
+                    <div class="vignette-desc">
+                        Descripción para la imagen 2
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Viñeta 3 -->
+            <div class="vignette" data-id="3">
+                <div class="vignette-img-container">
+                    <img src="Imagen3.png" alt="Imagen 3" class="vignette-img">
+                </div>
+                <div class="vignette-text">
+                    <div class="vignette-desc">
+                        Descripción para la imagen 3
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Viñeta 4 -->
+            <div class="vignette" data-id="4">
+                <div class="vignette-img-container">
+                    <img src="Imagen4.png" alt="Imagen 4" class="vignette-img">
+                </div>
+                <div class="vignette-text">
+                    <div class="vignette-desc">
+                        Descripción para la imagen 4
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Viñeta 5 -->
+            <div class="vignette" data-id="5">
+                <div class="vignette-img-container">
+                    <img src="Imagen5.png" alt="Imagen 5" class="vignette-img">
+                </div>
+                <div class="vignette-text">
+                    <div class="vignette-desc">
+                        Descripción para la imagen 5
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Viñeta 6 -->
+            <div class="vignette" data-id="6">
+                <div class="vignette-img-container">
+                    <img src="Imagen6.png" alt="Imagen 6" class="vignette-img">
+                </div>
+                <div class="vignette-text">
+                    <div class="vignette-desc">
+                        Descripción para la imagen 6
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Viñeta 7 -->
+            <div class="vignette" data-id="7">
+                <div class="vignette-img-container">
+                    <img src="Imagen7.png" alt="Imagen 7" class="vignette-img">
+                </div>
+                <div class="vignette-text">
+                    <div class="vignette-desc">
+                        Descripción para la imagen 7
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Viñeta 8 -->
+            <div class="vignette" data-id="8">
+                <div class="vignette-img-container">
+                    <img src="Imagen8.png" alt="Imagen 8" class="vignette-img">
+                </div>
+                <div class="vignette-text">
+                    <div class="vignette-desc">
+                        Descripción para la imagen 8
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Viñeta 9 -->
+            <div class="vignette" data-id="9">
+                <div class="vignette-img-container">
+                    <img src="https://source.unsplash.com/random/600x600?abstract,9" alt="Imagen 9" class="vignette-img">
+                </div>
+                <div class="vignette-text">
+                    <div class="vignette-desc">
+                        Descripción para la imagen 9
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const vignettes = document.querySelectorAll('.vignette');
+            const showAllBtn = document.getElementById('showAllBtn');
+            const presentationBtn = document.getElementById('presentationBtn');
+            const gallery = document.querySelector('.gallery');
+            
+            let presentationMode = false;
+            let currentIndex = 0;
+            let presentationInterval;
+            
+            // Mostrar todas las viñetas
+            function showAllVignettes() {
+                gallery.classList.remove('presentation-mode');
+                vignettes.forEach(vignette => {
+                    vignette.classList.remove('hidden');
+                    vignette.style.opacity = '1';
+                    vignette.style.transform = 'translateY(0)';
+                });
+                
+                if (presentationInterval) {
+                    clearInterval(presentationInterval);
+                    presentationInterval = null;
+                }
+                
+                presentationMode = false;
+            }
+            
+            // Iniciar presentación
+            function startPresentation() {
+                gallery.classList.add('presentation-mode');
+                presentationMode = true;
+                currentIndex = 0;
+                
+                // Ocultar todas las viñetas primero
+                vignettes.forEach(vignette => {
+                    vignette.classList.remove('active');
+                    vignette.style.opacity = '0';
+                    vignette.style.transform = 'translateY(20px)';
+                });
+                
+                // Mostrar la primera viñeta
+                if (vignettes.length > 0) {
+                    vignettes[0].classList.add('active');
+                }
+                
+                // Configurar el intervalo para cambiar de viñeta
+                if (presentationInterval) {
+                    clearInterval(presentationInterval);
+                }
+                
+                presentationInterval = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % vignettes.length;
+                    
+                    // Ocultar todas
+                    vignettes.forEach(vignette => {
+                        vignette.classList.remove('active');
+                    });
+                    
+                    // Mostrar la siguiente
+                    vignettes[currentIndex].classList.add('active');
+                    
+                }, 3000); // Cambia cada 3 segundos
+            }
+            
+            // Event listeners
+            showAllBtn.addEventListener('click', showAllVignettes);
+            presentationBtn.addEventListener('click', startPresentation);
+            
+            // Iniciar con todas las viñetas visibles
+            showAllVignettes();
+            
+            // Efecto hover mejorado
+            vignettes.forEach(vignette => {
+                vignette.addEventListener('mouseenter', () => {
+                    vignette.style.transform = 'translateY(-5px)';
+                    vignette.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.15)';
+                });
+                
+                vignette.addEventListener('mouseleave', () => {
+                    vignette.style.transform = 'translateY(0)';
+                    vignette.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
