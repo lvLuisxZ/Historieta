@@ -3,19 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galería Interactiva Mejorada</title>
+<title>Más contaminación es menos vida</title>
 <style>
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Montserrat', 'Arial', sans-serif;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
 body {
-  background-color: #ffffff;
+  background-color: #f0f8ff;
   min-height: 100vh;
   padding: 20px;
+  background-image: radial-gradient(circle at 10% 20%, rgba(176, 224, 230, 0.2) 0%, rgba(240, 248, 255, 0.8) 90%);
 }
 
 .container {
@@ -24,15 +27,128 @@ body {
   padding: 20px;
 }
 
-h1 {
+/* Animación del título */
+.title-container {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 30px;
   text-align: center;
-  margin-bottom: 20px;
-  color: #e74c3c;
-  font-size: 2.8rem;
-  font-weight: 700;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
 
+h1 {
+  display: inline-block;
+  color: #2c3e50;
+  font-size: 3rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: titleFadeIn 1.5s ease-out forwards;
+}
+
+h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #e74c3c, #3498db);
+  border-radius: 2px;
+  animation: lineExpand 1s ease-out 0.5s forwards;
+}
+
+@keyframes titleFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lineExpand {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100px;
+  }
+}
+
+/* Mensaje inicial */
+.initial-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(44, 62, 80, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 1001;
+  color: white;
+  font-size: 3rem;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+
+.initial-message.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.initial-message h2 {
+  font-size: 4rem;
+  margin-bottom: 30px;
+  color: #e74c3c;
+  text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+  animation: pulse 2s infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+  }
+  to {
+    transform: scale(1.05);
+    text-shadow: 0 0 20px rgba(231, 76, 60, 0.8);
+  }
+}
+
+.initial-message p {
+  font-size: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+.start-button {
+  padding: 15px 40px;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+}
+
+.start-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(231, 76, 60, 0.6);
+}
+
+/* Controles */
 .controls {
   display: flex;
   justify-content: center;
@@ -46,12 +162,34 @@ h1 {
   background: linear-gradient(135deg, #e74c3c, #c0392b);
   color: white;
   border: none;
-  border-radius: 30px;
+  border-radius: 50px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255,255,255,0.3),
+    rgba(255,255,255,0)
+  );
+  transform: rotate(30deg);
+  transition: all 0.3s ease;
+}
+
+.btn:hover::after {
+  left: 100%;
 }
 
 .btn:hover {
@@ -87,6 +225,7 @@ h1 {
   box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
 }
 
+/* Galería */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -104,6 +243,23 @@ h1 {
   transform: scale(1);
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.vignette::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.1),
+    rgba(255,255,255,0)
+  );
+  z-index: 1;
+  pointer-events: none;
 }
 
 .vignette.hidden {
@@ -122,13 +278,14 @@ h1 {
 .vignette-img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   background-color: #f8f9fa;
-  transition: transform 0.5s ease;
+  transition: transform 0.5s ease, filter 0.5s ease;
 }
 
 .vignette:hover .vignette-img {
-  transform: scale(1.03);
+  transform: scale(1.05);
+  filter: brightness(1.05);
 }
 
 .vignette-text {
@@ -138,6 +295,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
 }
 
 .vignette-desc {
@@ -145,24 +303,54 @@ h1 {
   font-size: 0.95rem;
   line-height: 1.6;
   margin-bottom: 15px;
+  position: relative;
+}
+
+.vignette-desc::first-letter {
+  font-size: 1.5em;
+  color: #e74c3c;
+  font-weight: bold;
 }
 
 .show-final-btn {
-  padding: 8px 15px;
-  background: #f39c12;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #f39c12, #e67e22);
   color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 50px;
   cursor: pointer;
   font-size: 0.9rem;
   transition: all 0.3s ease;
-  align-self: flex-start;
+  align-self: flex-end;
   margin-top: auto;
+  box-shadow: 0 3px 10px rgba(243, 156, 18, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.show-final-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.4),
+    transparent
+  );
+  transition: all 0.5s ease;
+}
+
+.show-final-btn:hover::after {
+  left: 100%;
 }
 
 .show-final-btn:hover {
-  background: #e67e22;
   transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
 }
 
 /* Modo presentación */
@@ -197,49 +385,44 @@ h1 {
   align-items: center;
   margin-bottom: 20px;
   overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  background: #f8f9fa;
 }
 
 .presentation-img {
   max-width: 100%;
   max-height: 70vh;
   object-fit: contain;
-  border-radius: 10px;
-  box-shadow: 0 5px 30px rgba(0,0,0,0.2);
+  border-radius: 15px;
 }
 
 .presentation-text {
   background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #333;
+  position: relative;
+}
+
+.presentation-text::before {
+  content: '""';
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  font-size: 3rem;
+  color: rgba(231, 76, 60, 0.2);
+  font-family: serif;
 }
 
 .close-presentation {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 20px;
   font-size: 30px;
-  color: #e74c3c;
-  cursor: pointer;
-  background: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  z-index: 10;
-}
-
-.nav-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 40px;
   color: #e74c3c;
   cursor: pointer;
   background: white;
@@ -251,6 +434,38 @@ h1 {
   align-items: center;
   box-shadow: 0 2px 15px rgba(0,0,0,0.1);
   z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.close-presentation:hover {
+  transform: rotate(90deg);
+  color: white;
+  background: #e74c3c;
+}
+
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 40px;
+  color: #e74c3c;
+  cursor: pointer;
+  background: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.nav-arrow:hover {
+  color: white;
+  background: #e74c3c;
+  transform: translateY(-50%) scale(1.1);
 }
 
 .prev-arrow {
@@ -281,14 +496,19 @@ h1 {
   width: 90%;
   max-height: 90vh;
   position: relative;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
 }
 
 .final-img {
   max-width: 100%;
   max-height: 80vh;
   object-fit: contain;
-  border-radius: 10px;
-  box-shadow: 0 5px 30px rgba(0,0,0,0.2);
+  border-radius: 15px;
+  display: block;
+  margin: 0 auto;
 }
 
 .close-final {
@@ -299,14 +519,21 @@ h1 {
   color: #e74c3c;
   cursor: pointer;
   background: white;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
   z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.close-final:hover {
+  transform: rotate(90deg);
+  color: white;
+  background: #e74c3c;
 }
 
 /* Modal para la historieta completa */
@@ -320,21 +547,25 @@ h1 {
   background-color: rgba(255,255,255,0.95);
   z-index: 1000;
   overflow-y: auto;
+  padding: 40px 20px;
 }
 
 .full-comic-content {
   max-width: 600px;
   width: 90%;
-  margin: 40px auto;
+  margin: 0 auto;
   position: relative;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
 }
 
 .full-comic-img {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 10px;
-  box-shadow: 0 5px 30px rgba(0,0,0,0.2);
+  border-radius: 15px;
 }
 
 .close-full-comic {
@@ -345,14 +576,21 @@ h1 {
   color: #e74c3c;
   cursor: pointer;
   background: white;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
   z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.close-full-comic:hover {
+  transform: rotate(90deg);
+  color: white;
+  background: #e74c3c;
 }
 
 /* Animaciones */
@@ -375,6 +613,35 @@ h1 {
 .vignette:nth-child(8) { animation-delay: 0.8s; }
 .vignette:nth-child(9) { animation-delay: 0.9s; }
 
+/* Efecto de partículas */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.particle {
+  position: absolute;
+  background-color: rgba(52, 152, 219, 0.3);
+  border-radius: 50%;
+  animation: float linear infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .gallery {
@@ -387,6 +654,15 @@ h1 {
   
   .vignette-img-container {
     height: 240px;
+  }
+  
+  .initial-message h2 {
+    font-size: 2.5rem;
+  }
+  
+  .initial-message p {
+    font-size: 1.2rem;
+    padding: 0 20px;
   }
 }
 
@@ -413,14 +689,40 @@ h1 {
   
   .full-comic-content {
     max-width: 95%;
-    margin: 60px auto;
+    padding: 20px;
+  }
+  
+  .initial-message h2 {
+    font-size: 2rem;
+    padding: 0 20px;
+  }
+  
+  .initial-message p {
+    font-size: 1rem;
+  }
+  
+  .start-button {
+    padding: 12px 30px;
+    font-size: 1rem;
   }
 }
 </style>
 </head>
 <body>
+<!-- Efecto de partículas -->
+<div class="particles" id="particles"></div>
+
+<!-- Mensaje inicial -->
+<div class="initial-message" id="initialMessage">
+  <h2>Grupo 8</h2>
+  <p>"Más contaminación es menos vida"</p>
+  <button class="start-button" id="startButton">Comenzar</button>
+</div>
+
 <div class="container">
-  <h1>Mi Historieta Interactiva</h1>
+  <div class="title-container">
+    <h1>Más contaminación es menos vida</h1>
+  </div>
   
   <div class="controls">
     <button id="presentationBtn" class="btn">Modo Presentación</button>
@@ -433,7 +735,7 @@ h1 {
         <img src="image.png" alt="Imagen 1" class="vignette-img">
       </div>
       <div class="vignette-text">
-        <div class="vignette-desc">Texto descriptivo para la viñeta 1</div>
+        <div class="vignette-desc">En Trujillo, una ciudad costera del norte de Perú, los habitantes se reúnen en protesta contra la contaminación ambiental. </div>
       </div>
     </div>
     
@@ -443,7 +745,8 @@ h1 {
         <img src="Imagen2.png" alt="Imagen 2" class="vignette-img">
       </div>
       <div class="vignette-text">
-        <div class="vignette-desc">Texto descriptivo para la viñeta 2</div>
+        <div class="vignette-desc">Con pancartas como "¡Basta de contaminación!" y "Cuidemos la naturaleza", exigen soluciones a los problemas causados por industrias locales que emiten humo tóxico.
+</div>
       </div>
     </div>
     
@@ -453,7 +756,8 @@ h1 {
         <img src="Imagen3.png" alt="Imagen 3" class="vignette-img">
       </div>
       <div class="vignette-text">
-        <div class="vignette-desc">Texto descriptivo para la viñeta 3</div>
+        <div class="vignette-desc">Una joven trujillana explica cómo la contaminación del aire y el daño al medio ambiente afectan diariamente a la población, destacando los riesgos para la salud pública en una región donde el polvo y los residuos industriales son comunes.
+</div>
       </div>
     </div>
     
@@ -463,7 +767,7 @@ h1 {
         <img src="Imagen4.png" alt="Imagen 4" class="vignette-img">
       </div>
       <div class="vignette-text">
-        <div class="vignette-desc">Texto descriptivo para la viñeta 4</div>
+        <div class="vignette-desc"> Un anciano observa con tristeza un río contaminado cerca de Trujillo, donde los desechos industriales han matado a los peces, reflejando la grave situación de los cuerpos de agua en la zona afectada por actividades manufactureras.</div>
       </div>
     </div>
     
@@ -473,7 +777,7 @@ h1 {
         <img src="Imagen5.png" alt="Imagen 5" class="vignette-img">
       </div>
       <div class="vignette-text">
-        <div class="vignette-desc">Texto descriptivo para la viñeta 5</div>
+        <div class="vignette-desc">Un niño señala los ecosistemas destruidos alrededor de Trujillo, como los humedales y áreas verdes que han sido perjudicados por la urbanización y la contaminación, amenazando la biodiversidad local.</div>
       </div>
     </div>
     
@@ -483,7 +787,7 @@ h1 {
         <img src="Imagen6.png" alt="Imagen 6" class="vignette-img">
       </div>
       <div class="vignette-text">
-        <div class="vignette-desc">Texto descriptivo para la viñeta 6</div>
+        <div class="vignette-desc">La joven propone medidas para proteger el entorno en Trujillo, abogando por regulaciones más estrictas a las industrias y proyectos de reforestación para recuperar los espacios naturales dañados.</div>
       </div>
     </div>
     
@@ -493,7 +797,7 @@ h1 {
         <img src="Imagen7.png" alt="Imagen 7" class="vignette-img">
       </div>
       <div class="vignette-text">
-        <div class="vignette-desc">Texto descriptivo para la viñeta 7</div>
+        <div class="vignette-desc">Una familia en Trujillo planta árboles como parte de un esfuerzo comunitario para restaurar el medio ambiente, mostrando cómo los ciudadanos toman acción frente a la crisis ecológica en su región.</div>
       </div>
     </div>
     
@@ -503,7 +807,8 @@ h1 {
         <img src="Imagen8.png" alt="Imagen 8" class="vignette-img">
       </div>
       <div class="vignette-text">
-        <div class="vignette-desc">Texto descriptivo para la viñeta 8</div>
+        <div class="vignette-desc">La protesta culminó con un mensaje unificado en Trujillo: "¡Todos queremos vivir en un ambiente sano!", reforzando el compromiso de la comunidad para luchar por un futuro sostenible en esta ciudad peruana.
+</div>
         <button class="show-final-btn">Mostrar Final</button>
       </div>
     </div>
@@ -514,7 +819,7 @@ h1 {
         <img src="Imagen9.png" alt="Imagen 9" class="vignette-img">
       </div>
       <div class="vignette-text">
-        <div class="vignette-desc">Texto descriptivo para el final</div>
+        <div class="vignette-desc">Todo acabo con un final satisfactorio para todos</div>
       </div>
     </div>
   </div>
@@ -558,6 +863,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const presentationBtn = document.getElementById('presentationBtn');
   const showFinalBtn = document.querySelector('.show-final-btn');
   const showFullComicBtn = document.getElementById('showFullComic');
+  const initialMessage = document.getElementById('initialMessage');
+  const startButton = document.getElementById('startButton');
   
   // Elementos del modo presentación
   const presentationContainer = document.getElementById('presentationContainer');
@@ -577,10 +884,50 @@ document.addEventListener('DOMContentLoaded', function() {
   const closeFullComic = document.getElementById('closeFullComic');
   const fullComicImg = document.getElementById('fullComicImg');
   
+  // Efecto de partículas
+  const particlesContainer = document.getElementById('particles');
+  const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6'];
+  
+  function createParticles() {
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      
+      const size = Math.random() * 10 + 5;
+      const posX = Math.random() * window.innerWidth;
+      const duration = Math.random() * 20 + 10;
+      const delay = Math.random() * 5;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${posX}px`;
+      particle.style.bottom = `-${size}px`;
+      particle.style.backgroundColor = color;
+      particle.style.animationDuration = `${duration}s`;
+      particle.style.animationDelay = `${delay}s`;
+      
+      particlesContainer.appendChild(particle);
+    }
+  }
+  
+  createParticles();
+  
+  // Mostrar mensaje inicial
+  setTimeout(() => {
+    initialMessage.classList.add('show');
+  }, 500);
+  
+  // Ocultar mensaje inicial y mostrar contenido
+  startButton.addEventListener('click', () => {
+    initialMessage.classList.remove('show');
+    document.querySelector('.title-container h1').style.animation = 'titleFadeIn 1.5s ease-out forwards';
+  });
+  
+  // Preparar datos para la presentación
   let currentPresentationIndex = 0;
   const presentationData = [];
   
-  // Preparar datos para la presentación
   vignettes.forEach((vignette, index) => {
     const imgSrc = vignette.querySelector('.vignette-img').src;
     const desc = vignette.querySelector('.vignette-desc').textContent;
